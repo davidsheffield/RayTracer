@@ -5,7 +5,7 @@ class OpticalSurface:
 
     Spherical surface between two materials.
 
-    Parameters
+    Attributes
     ----------
     vertex : float
         Position [mm] where the surface crosses the optical axis.
