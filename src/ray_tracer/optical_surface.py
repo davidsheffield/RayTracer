@@ -1,3 +1,6 @@
+import ray_tracer
+
+
 class OpticalSurface:
     """
     OpticalSurface
@@ -17,20 +20,23 @@ class OpticalSurface:
         Diameter [mm] of the aperture of the surface.
     half_aperture : float
         Radius [mm] of the aperture of the surface.
-    front_material : OpticalMaterial
+    front_material : ray_tracer.OpticalMaterial
         Material to the front of the surface.
-    back_material : OpticalMaterial
+    back_material : ray_tracer.OpticalMaterial
         Material to the back of the surface.
     """
 
-    def __init__(self, vertex, radius, aperture):
+    def __init__(self, vertex, radius, aperture, front_material, back_material):
+        if not isinstance(front_material, ray_tracer.OpticalMaterial) \
+           or not isinstance(back_material, ray_tracer.OpticalMaterial):
+            raise TypeError('Front and back materials must be ray_tracer.OpticalMaterial')
         self._vertex = vertex
         self._radius = radius
         self._curvature = 1.0 / radius
         self._aperture = aperture
         self._half_aperture = aperture / 2.0
-        self.front_material = None
-        self.back_material = None
+        self._front_material = front_material
+        self._back_material = back_material
 
 
     @property
@@ -85,3 +91,27 @@ class OpticalSurface:
     def half_aperture(self, value):
         self._half_aperture = value
         self._aperture = value * 2.0
+
+
+    @property
+    def front_material(self):
+        return self._front_material
+
+
+    @front_material.setter
+    def front_material(self, material):
+        if not isinstance(material, ray_tracer.OpticalMaterial):
+            raise TypeError('material must be ray_tracer.OpticalMaterial')
+        self._front_material = material
+
+
+    @property
+    def back_material(self):
+        return self._back_material
+
+
+    @back_material.setter
+    def back_material(self, material):
+        if not isinstance(material, ray_tracer.OpticalMaterial):
+            raise TypeError('material must be ray_tracer.OpticalMaterial')
+        self._back_material = material
