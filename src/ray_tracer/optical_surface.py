@@ -24,6 +24,8 @@ class OpticalSurface:
         Material to the front of the surface.
     back_material : ray_tracer.OpticalMaterial
         Material to the back of the surface.
+    power : float
+        Power of the surface.
     """
 
     def __init__(self, vertex, radius, aperture, front_material, back_material):
@@ -37,6 +39,9 @@ class OpticalSurface:
         self._half_aperture = aperture / 2.0
         self._front_material = front_material
         self._back_material = back_material
+        self._power = {}
+
+        self.update_power()
 
 
     @property
@@ -58,6 +63,7 @@ class OpticalSurface:
     def radius(self, value):
         self._radius = value
         self._curvature = 1.0 / value
+        self.update_power()
 
 
     @property
@@ -69,6 +75,7 @@ class OpticalSurface:
     def curvature(self, value):
         self._curvature = value
         self._radius = 1.0 / value
+        self.update_power()
 
 
     @property
@@ -103,6 +110,7 @@ class OpticalSurface:
         if not isinstance(material, ray_tracer.OpticalMaterial):
             raise TypeError('material must be ray_tracer.OpticalMaterial')
         self._front_material = material
+        self.update_power()
 
 
     @property
@@ -115,3 +123,22 @@ class OpticalSurface:
         if not isinstance(material, ray_tracer.OpticalMaterial):
             raise TypeError('material must be ray_tracer.OpticalMaterial')
         self._back_material = material
+        self.update_power()
+
+
+    @property
+    def power(self):
+        return self._power
+
+
+    def update_power(self):
+        """
+        Update power
+        """
+
+        self._power = {}
+        for wavelength in (self._front_material.index.keys()
+                           & self._back_material.index.keys()):
+            self._power[wavelength] = ((self._back_material.index[wavelength]
+                                        - self._front_material.index[wavelength])
+                                       * self._curvature)
