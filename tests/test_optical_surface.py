@@ -2,6 +2,8 @@
 
 import pytest
 
+import numpy as np
+
 import ray_tracer
 
 
@@ -27,7 +29,7 @@ def surface(front_material, back_material):
     Set up OpticalSurface to test
     """
 
-    return ray_tracer.OpticalSurface(0, 2, 12, front_material, back_material)
+    return ray_tracer.OpticalSurface(0, 2, 1, front_material, back_material)
 
 
 class TestVertex:
@@ -64,8 +66,8 @@ class TestRadiusCurvature:
 
 class TestApertureHalfAperture:
     def test_init(self, surface):
-        assert surface.aperture == 12
-        assert surface.half_aperture == 6
+        assert surface.aperture == 1.0
+        assert surface.half_aperture == 0.5
 
 
     def test_aperture_setter(self, surface):
@@ -131,6 +133,65 @@ class TestPower:
         assert surface.power[ray_tracer.Fraunhofer_line['d']] == 0.4
 
 
-    def test_power_setter(self, surface):
+    def test_setter(self, surface):
         with pytest.raises(AttributeError):
             surface.power = 2
+
+
+class TestCrossSectionPoints:
+    def test_init(self, surface):
+        assert surface.cross_section_points == 51
+
+
+    def test_setter(self, surface):
+        surface.cross_section_points = 3
+        assert surface.cross_section_points == 3
+
+
+    def test_setter_minimum_value(self, surface):
+        with pytest.raises(ValueError):
+            surface.cross_section_points = 2
+
+
+    def test_setter_minimum_value(self, surface):
+        with pytest.raises(TypeError):
+            surface.cross_section_points = 'a'
+
+
+class TestCrossSection:
+    def test_getter(self, surface):
+        np.testing.assert_allclose(
+            surface.cross_section,
+            [[6.35083269e-02, 5.85537188e-02, 5.37974389e-02, 4.92399729e-02,
+              4.48817865e-02, 4.07233248e-02, 3.67650127e-02, 3.30072546e-02,
+              2.94504343e-02, 2.60949151e-02, 2.29410398e-02, 1.99891307e-02,
+              1.72394892e-02, 1.46923963e-02, 1.23481122e-02, 1.02068763e-02,
+              8.26890736e-03, 6.53440338e-03, 5.00354153e-03, 3.67647821e-03,
+              2.55334897e-03, 1.63426855e-03, 9.19330844e-04, 4.08608878e-04,
+              1.02154828e-04, 0.00000000e+00, 1.02154828e-04, 4.08608878e-04,
+              9.19330844e-04, 1.63426855e-03, 2.55334897e-03, 3.67647821e-03,
+              5.00354153e-03, 6.53440338e-03, 8.26890736e-03, 1.02068763e-02,
+              1.23481122e-02, 1.46923963e-02, 1.72394892e-02, 1.99891307e-02,
+              2.29410398e-02, 2.60949151e-02, 2.94504343e-02, 3.30072546e-02,
+              3.67650127e-02, 4.07233248e-02, 4.48817865e-02, 4.92399729e-02,
+              5.37974389e-02, 5.85537188e-02, 6.35083269e-02],
+             [-5.00000000e-01, -4.80402266e-01, -4.60755457e-01,
+              -4.41061579e-01, -4.21322645e-01, -4.01540671e-01,
+              -3.81717677e-01, -3.61855689e-01, -3.41956736e-01,
+              -3.22022850e-01, -3.02056068e-01, -2.82058429e-01,
+              -2.62031977e-01, -2.41978757e-01, -2.21900818e-01,
+              -2.01800210e-01, -1.81678988e-01, -1.61539206e-01,
+              -1.41382922e-01, -1.21212195e-01, -1.01029086e-01,
+              -8.08356566e-02, -6.06339691e-02, -4.04260875e-02,
+              -2.02140762e-02, 0.00000000e+00, 2.02140762e-02, 4.04260875e-02,
+              6.06339691e-02, 8.08356566e-02, 1.01029086e-01, 1.21212195e-01,
+              1.41382922e-01, 1.61539206e-01, 1.81678988e-01, 2.01800210e-01,
+              2.21900818e-01, 2.41978757e-01, 2.62031977e-01, 2.82058429e-01,
+              3.02056068e-01, 3.22022850e-01, 3.41956736e-01, 3.61855689e-01,
+              3.81717677e-01, 4.01540671e-01, 4.21322645e-01, 4.41061579e-01,
+              4.60755457e-01, 4.80402266e-01, 5.00000000e-01]])
+
+
+    def test_setter(self, surface):
+        with pytest.raises(AttributeError):
+            surface.cross_section = 2

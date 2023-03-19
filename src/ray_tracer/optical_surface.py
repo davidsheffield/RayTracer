@@ -1,3 +1,5 @@
+import numpy as np
+
 import ray_tracer
 
 
@@ -26,6 +28,11 @@ class OpticalSurface:
         Material to the back of the surface.
     power : float
         Power of the surface.
+    cross_section_points : int
+        The number of points in cross_section.
+    cross_section : np.array
+        The (z, y) position of the cross section of the optical surface over the
+        entire aperture with cross_section_points number of points.
     """
 
     def __init__(self, vertex, radius, aperture, front_material, back_material):
@@ -40,8 +47,11 @@ class OpticalSurface:
         self._front_material = front_material
         self._back_material = back_material
         self._power = {}
+        self._cross_section_points = 51
+        self._cross_section = None
 
         self.update_power()
+        self.update_cross_section()
 
 
     @property
@@ -142,3 +152,32 @@ class OpticalSurface:
             self._power[wavelength] = ((self._back_material.index[wavelength]
                                         - self._front_material.index[wavelength])
                                        * self._curvature)
+
+
+    @property
+    def cross_section_points(self):
+        return self._cross_section_points
+
+
+    @cross_section_points.setter
+    def cross_section_points(self, value):
+        if value < 3:
+            raise ValueError('Must have at least three points for the cross section')
+        self._cross_section_points = int(value)
+
+
+    @property
+    def cross_section(self):
+        return self._cross_section
+
+
+    def update_cross_section(self):
+        """
+        Update cross_section
+        """
+
+        theta_max = np.arcsin(self._half_aperture / self._radius)
+        theta = np.linspace(-theta_max, theta_max, 51)
+        self._cross_section = np.array(
+            [self._vertex + self._radius * (1 - np.cos(theta)),
+             self._radius * np.sin(theta)])
