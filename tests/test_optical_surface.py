@@ -195,3 +195,16 @@ class TestCrossSection:
     def test_setter(self, surface):
         with pytest.raises(AttributeError):
             surface.cross_section = 2
+
+
+class TestComparisons:
+    def test_lt(self, front_material, back_material):
+        surface_1 = ray_tracer.OpticalSurface(0, 2, 1, front_material, back_material)
+        surface_2 = ray_tracer.OpticalSurface(1, 1, 0.5, back_material, front_material)
+        assert surface_1 < surface_2
+
+
+    def test_gt(self, front_material, back_material):
+        surface_1 = ray_tracer.OpticalSurface(1, 2, 1, front_material, back_material)
+        surface_2 = ray_tracer.OpticalSurface(0, 1, 0.5, back_material, front_material)
+        assert surface_1 > surface_2

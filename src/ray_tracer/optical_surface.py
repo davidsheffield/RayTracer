@@ -181,3 +181,7 @@ class OpticalSurface:
         self._cross_section = np.array(
             [self._vertex + self._radius * (1 - np.cos(theta)),
              self._radius * np.sin(theta)])
+
+
+    def __lt__(self, surface):
+        return self._vertex < surface.vertex
