@@ -17,7 +17,7 @@ class OpticalSurface:
     radius : float
         Radius [mm] of curvature for the surface. radius = 1 / curvature
     curvature : float
-        Curvature [1 / mm] of the surface. curvature = 1 / radiu
+        Curvature [1 / mm] of the surface. curvature = 1 / radius
     aperture : float
         Diameter [mm] of the aperture of the surface.
     half_aperture : float

@@ -28,13 +28,13 @@ class ParaxialRay:
         """
         Parameters
         ----------
-        Wavelength : ray_tracer.Wavelength
+        wavelength : ray_tracer.Wavelength
             Wavelength of the ray.
         z0 : float
             Initial z coordinate along the axis of the optical system in millimeters.
         y0 : float
             Initial y coordinate transverse to the optical system in millimeters.
-        u : float
+        u0 : float
             Initial angle of the direction of the ray relative to the optical axis in radians.
         """
 
