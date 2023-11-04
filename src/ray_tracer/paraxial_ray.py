@@ -67,7 +67,7 @@ class ParaxialRay:
                 / surface.front_material.index[self.wavelength])
 
 
-    def draw(self, ax):
+    def draw(self, ax, color='blue'):
         """
         Draw the ray.
 
@@ -75,8 +75,10 @@ class ParaxialRay:
         ----------
         ax : matplotlib.axes._axes.Axes
             Plot of optical system.
+        color : str
+            Color of the ray. Default: 'blue'
         """
 
         ax.plot(self.z,
                 self.y,
-                color='blue')
+                color=color)

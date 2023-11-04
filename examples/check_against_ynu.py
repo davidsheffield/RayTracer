@@ -2,8 +2,6 @@
 Test the calculations by comparing against golden samples.
 """
 
-import copy
-
 import matplotlib.pyplot as plt
 
 import ray_tracer
