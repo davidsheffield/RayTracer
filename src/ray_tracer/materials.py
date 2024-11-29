@@ -1,3 +1,8 @@
+"""
+Instantiate `OpticalMeterial` objects for common materials.
+"""
+
+
 import ray_tracer
 
 
