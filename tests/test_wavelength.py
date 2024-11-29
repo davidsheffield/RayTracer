@@ -26,6 +26,11 @@ class TestInit:
             line = ray_tracer.Wavelength('500', 'a')
 
 
+    def test_negative_wavelength(self):
+        with pytest.raises(ValueError):
+            line = ray_tracer.Wavelength('500', -500.0)
+
+
 class TestImmutable:
     @pytest.fixture
     def line(self):
@@ -53,6 +58,30 @@ class TestComparison:
         line1 = ray_tracer.Wavelength('400', 400.0)
         line2 = ray_tracer.Wavelength('500', 500.0)
         assert line1 < line2
+
+
+    def test_gt(self):
+        line1 = ray_tracer.Wavelength('600', 600.0)
+        line2 = ray_tracer.Wavelength('500', 500.0)
+        assert line1 > line2
+
+
+    @pytest.mark.parametrize('wavelength1, wavelength2',
+                             [(400, 500),
+                              (500, 500)])
+    def test_le(self, wavelength1, wavelength2):
+        line1 = ray_tracer.Wavelength(str(wavelength1), wavelength1)
+        line2 = ray_tracer.Wavelength(str(wavelength2), wavelength2)
+        assert line1 <= line2
+
+
+    @pytest.mark.parametrize('wavelength1, wavelength2',
+                             [(600, 500),
+                              (500, 500)])
+    def test_ge(self, wavelength1, wavelength2):
+        line1 = ray_tracer.Wavelength(str(wavelength1), wavelength1)
+        line2 = ray_tracer.Wavelength(str(wavelength2), wavelength2)
+        assert line1 >= line2
 
 
     def test_hashable(self):

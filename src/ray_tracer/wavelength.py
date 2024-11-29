@@ -24,7 +24,10 @@ class Wavelength:
         the attributes are frozen to make the objects hashable.
         """
 
-        object.__setattr__(self, 'wavelength', float(self.wavelength))
+        wavelength = float(self.wavelength)
+        if wavelength < 0:
+            raise ValueError("Wavelength must be non-negative")
+        object.__setattr__(self, 'wavelength', wavelength)
 
 
 Fraunhofer_line = {'i': Wavelength('i', 365.01),
